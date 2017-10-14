@@ -93,7 +93,7 @@ module Redemption
               {% if dim1 == dim2 && dim1 == 4 %}
 
                 # Define a method that creates a scaling Matrix from the given vector
-                def self.scale(other : Vector3{{qabrv}}) : Matrix{{dim1}}x{{dim2}}{{abrv}}
+                def self.scaling(other : Vector3{{qabrv}}) : Matrix{{dim1}}x{{dim2}}{{abrv}}
 
                   # If the current Matrix's number type is different from the iterator's number type
                   {% if abrv != qabrv %}
@@ -113,6 +113,10 @@ module Redemption
                   # Return a new Matrix that represents the result of the operation
                   Matrix4x4{{abrv}}.new({% for i in 0...4 %} {% for j in 0...4 %} {% if i == j %} {% if i != 3 %} ovals[{{i}}], {% else %} 1, {% end %} {% else %} 0, {% end %} {% end %} {% end %})
                 end # end scale def
+
+                def scale(other : Vector3{{qabrv}}) : Matrix{{dim1}}x{{dim2}}{{abrv}}
+                  self * Matrix4x4{{abrv}}.scaling(other)
+                end
 
                 # Define a method that creates a translation matrix from the given vector
                 def self.translation(other : Vector3{{qabrv}}) : Matrix{{dim1}}x{{dim2}}{{abrv}}
@@ -135,6 +139,10 @@ module Redemption
                   # Return a new Matrix that represents the result of the operation
                   Matrix4x4{{abrv}}.new({% for i in 0...4 %} {% for j in 0...4 %} {% if i == j %} 1, {% elsif j == 3 %} ovals[{{i}}], {% else %} 0, {% end %} {% end %} {% end %})
                 end # end translation def
+
+                def translate(other : Vector3{{qabrv}}) : Matrix{{dim1}}x{{dim2}}{{abrv}}
+                  self * Matrix4x4{{abrv}}.translate(other)
+                end
                 
                 # Define a method that creates a rotation Matrix from the given vector
                 def self.rotation(ang : Number, axis : Vector3{{qabrv}}) : Matrix{{dim1}}x{{dim2}}{{abrv}}
@@ -164,7 +172,7 @@ module Redemption
                     0,
                     (axis_values[1] * axis_values[0] * (1 - cosangle)) + (axis_values[2] * sinangle),
                     cosangle + ((axis_values[1]**2) * (1 - cosangle)),
-                    (axis_values[1] * axis_values[0] * (1 - cosangle)) - (axis_values[0] * sinangle),
+                    (axis_values[1] * axis_values[2] * (1 - cosangle)) - (axis_values[0] * sinangle),
                     0,
                     (axis_values[2] * axis_values[0] * (1 - cosangle)) - (axis_values[1] * sinangle),
                     (axis_values[2] * axis_values[1] * (1 - cosangle)) + (axis_values[0] * sinangle),
@@ -176,6 +184,10 @@ module Redemption
                     1
                   )
                 end # end rotation def
+
+                def rotate(ang : Number, axis : Vector3{{qabrv}}) : Matrix{{dim1}}x{{dim2}}{{abrv}}
+                  self * Matrix4x4{{abrv}}.rotation(ang, axis)
+                end
 
               # End dim1 == dim2 && dim1 == 4 conditional
               {% end %}
