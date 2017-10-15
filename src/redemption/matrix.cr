@@ -40,7 +40,7 @@ macro define_initializer(abrv, dim1, dim2)
   end
 end
 
-macro define_to_a_method(klass, dim1, dim2)
+macro define_to_a_methods(klass, dim1, dim2)
   def to_a : StaticArray(StaticArray({{klass}}, {{dim1}}), {{dim2}})
     StaticArray[
       {% for i in 0...dim1 %}
@@ -49,6 +49,16 @@ macro define_to_a_method(klass, dim1, dim2)
             @v{{i}}{{j}},
           {% end %}
         ],
+      {% end %}
+    ]
+  end
+
+  def flat : StaticArray({{klass}}, {{dim1 * dim2}})
+    StaticArray [
+      {% for i in 0...dim1 %}
+        {% for j in 0...dim2 %}
+          @v{{i}}{{j}},
+        {% end %}
       {% end %}
     ]
   end
@@ -297,7 +307,7 @@ macro define_matrix(klass, abrv, dim1, dim2)
   struct Matrix{{dim1}}x{{dim2}}{{abrv}}
     define_instance_variables({{klass}}, {{dim1}}, {{dim2}})
     define_initializer({{abrv}}, {{dim1}}, {{dim2}})
-    define_to_a_method({{klass}}, {{dim1}}, {{dim2}})
+    define_to_a_methods({{klass}}, {{dim1}}, {{dim2}})
     define_to_s_method({{dim1}}, {{dim2}})
 
     {% for op in OPERATORS %}
