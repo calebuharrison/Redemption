@@ -80,7 +80,7 @@ end
 macro define_scaling_class_methods(abrv, qabrv, dim)
   def self.scaling(vec : Vector3{{qabrv}}) : Matrix{{dim}}x{{dim}}{{abrv}}
     vec_vals = vec.to_{{abrv}}.to_a
-    Matrix{{dim}}x{{dim}}{{abrv}}.new(
+    self.identity * Matrix{{dim}}x{{dim}}{{abrv}}.new(
       {% for i in 0...dim %}
         {% for j in 0...dim %}
           {% if i == j %}
@@ -95,7 +95,7 @@ macro define_scaling_class_methods(abrv, qabrv, dim)
           ,
         {% end %}
       {% end %}
-    ) * self.identity
+    )
   end
 
   def self.scaling(v0 : Number, v1 : Number, v2 : Number) : Matrix{{dim}}x{{dim}}{{abrv}}
@@ -116,7 +116,7 @@ end
 macro define_translation_class_methods(abrv, qabrv, dim)
   def self.translation(vec : Vector3{{qabrv}}) : Matrix{{dim}}x{{dim}}{{abrv}}
     vec_vals = vec.to_{{abrv}}.to_a
-    Matrix{{dim}}x{{dim}}{{abrv}}.new(
+    self.identity * Matrix{{dim}}x{{dim}}{{abrv}}.new(
       {% for i in 0...dim %}
         {% for j in 0...dim %}
           {% if i == j %}
@@ -129,7 +129,7 @@ macro define_translation_class_methods(abrv, qabrv, dim)
           ,
         {% end %}
       {% end %}
-    ) * self.identity
+    )
   end
 
   def self.translation(v0 : Number, v1 : Number, v2 : Number) : Matrix{{dim}}x{{dim}}{{abrv}}
@@ -155,7 +155,7 @@ macro define_rotation_class_methods(abrv, qabrv, dim)
     cosangle = Math.cos(angle)
     difference = 1 - cosangle
 
-    Matrix{{dim}}x{{dim}}{{abrv}}.new(
+    self.identity * Matrix{{dim}}x{{dim}}{{abrv}}.new(
       cosangle + ((axis_values[0]**2) * difference),
       (axis_values[0] * axis_values[1] * difference) - (axis_values[2] * sinangle),
       (axis_values[0] * axis_values[2] * difference) + (axis_values[1] * sinangle),
@@ -172,7 +172,7 @@ macro define_rotation_class_methods(abrv, qabrv, dim)
       0,
       0,
       1 
-    ) * self.identity
+    )
   end
 
   def self.rotation(ang : Number, axis0 : Number, axis1 : Number, axis2 : Number) : Matrix{{dim}}x{{dim}}{{abrv}}
