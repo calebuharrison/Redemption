@@ -95,7 +95,7 @@ macro define_scaling_class_methods(abrv, qabrv, dim)
           ,
         {% end %}
       {% end %}
-    )
+    ) * self.identity
   end
 
   def self.scaling(v0 : Number, v1 : Number, v2 : Number) : Matrix{{dim}}x{{dim}}{{abrv}}
@@ -129,7 +129,7 @@ macro define_translation_class_methods(abrv, qabrv, dim)
           ,
         {% end %}
       {% end %}
-    )
+    ) * self.identity
   end
 
   def self.translation(v0 : Number, v1 : Number, v2 : Number) : Matrix{{dim}}x{{dim}}{{abrv}}
@@ -172,7 +172,7 @@ macro define_rotation_class_methods(abrv, qabrv, dim)
       0,
       0,
       1 
-    )
+    ) * self.identity
   end
 
   def self.rotation(ang : Number, axis0 : Number, axis1 : Number, axis2 : Number) : Matrix{{dim}}x{{dim}}{{abrv}}
