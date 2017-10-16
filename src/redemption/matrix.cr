@@ -227,7 +227,7 @@ macro define_orthographic_class_method(abrv, dim)
 end
 
 macro define_perspective_class_method(abrv, dim)
-  def self.perspecitve(
+  def self.perspective(
     fov : Number,
     aspect : Number,
     near : Number,
