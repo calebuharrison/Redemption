@@ -105,7 +105,7 @@ end
 
 macro define_scale_methods(abrv, qabrv, dim)
   def scale(vec : Vector3{{qabrv}}) : Matrix{{dim}}x{{dim}}{{abrv}}
-    self * Matrix{{dim}}x{{dim}}{{abrv}}.scaling(vec)
+    Matrix{{dim}}x{{dim}}{{abrv}}.scaling(vec) * self
   end
 
   def scale(v0 : Number, v1 : Number, v2 : Number) : Matrix{{dim}}x{{dim}}{{abrv}}
@@ -139,7 +139,7 @@ end
 
 macro define_translate_methods(abrv, qabrv, dim)
   def translate(vec : Vector3{{qabrv}}) : Matrix{{dim}}x{{dim}}{{abrv}}
-    self * Matrix{{dim}}x{{dim}}{{abrv}}.translation(vec)
+    Matrix{{dim}}x{{dim}}{{abrv}}.translation(vec) * self
   end
 
   def translate(v0 : Number, v1 : Number, v2 : Number) : Matrix{{dim}}x{{dim}}{{abrv}}
@@ -182,7 +182,7 @@ end
 
 macro define_rotate_methods(abrv, qabrv, dim)
   def rotate(ang : Number, axis : Vector3{{qabrv}}) : Matrix{{dim}}x{{dim}}{{abrv}}
-    self * Matrix{{dim}}x{{dim}}{{abrv}}.rotation(ang, axis)
+    Matrix{{dim}}x{{dim}}{{abrv}}.rotation(ang, axis) * self
   end
 
   def rotate(ang : Number, axis0 : Number, axis1 : Number, axis2 : Number) : Matrix{{dim}}x{{dim}}{{abrv}}
