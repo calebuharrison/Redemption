@@ -227,26 +227,35 @@ macro define_orthographic_class_method(abrv, dim)
 end
 
 macro define_perspective_class_method(abrv, dim)
-  def self.perspective(fov : Number, near : Number, far : Number) : Matrix{{dim}}x{{dim}}{{abrv}}
-    s = 1 / Math.tan((0.5 * fov.to_{{abrv}}) * (Math::PI / 180))
+  def self.perspective(
+    left : Number, 
+    right : Number,
+    top : Number,
+    bottom : Number,
+    near : Number,
+    far : Number) : Matrix{{dim}}x{{dim}}{{abrv}}
+    l = left.to_{{abrv}}
+    r = right.to_{{abrv}}
+    t = top.to_{{abrv}}
+    b = bottom.to_{{abrv}}
     n = near.to_{{abrv}}
     f = far.to_{{abrv}}
     Matrix{{dim}}x{{dim}}{{abrv}}.new(
-      s,
+      ((2 * n) / (r - l)),
+      0,
+      ((r + l) / (r - l)),
+      0,
+      0,
+      ((2 * n) / (t - b)),
+      ((t + b) / (t - b)),
       0,
       0,
       0,
-      0,
-      s,
-      0,
-      0,
+      -1 * ((f + n) / (f - n)),
+      -1 * ((2 * f * n) / (f - n)),
       0,
       0,
-      -1 * (f / (f - n)),
       -1,
-      0,
-      0,
-      -1 * ((f * n) / (f - n)),
       0
     )
   end
