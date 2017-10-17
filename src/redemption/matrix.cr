@@ -105,7 +105,7 @@ end
 
 macro define_scale_methods(abrv, qabrv, dim)
   def scale(vec : Vector3{{qabrv}}) : Matrix{{dim}}x{{dim}}{{abrv}}
-    Matrix{{dim}}x{{dim}}{{abrv}}.scaling(vec) * self
+    self * Matrix{{dim}}x{{dim}}{{abrv}}.scaling(vec)
   end
 
   def scale(v0 : Number, v1 : Number, v2 : Number) : Matrix{{dim}}x{{dim}}{{abrv}}
@@ -139,7 +139,7 @@ end
 
 macro define_translate_methods(abrv, qabrv, dim)
   def translate(vec : Vector3{{qabrv}}) : Matrix{{dim}}x{{dim}}{{abrv}}
-    Matrix{{dim}}x{{dim}}{{abrv}}.translation(vec) * self
+    self * Matrix{{dim}}x{{dim}}{{abrv}}.translation(vec)
   end
 
   def translate(v0 : Number, v1 : Number, v2 : Number) : Matrix{{dim}}x{{dim}}{{abrv}}
@@ -182,7 +182,7 @@ end
 
 macro define_rotate_methods(abrv, qabrv, dim)
   def rotate(ang : Number, axis : Vector3{{qabrv}}) : Matrix{{dim}}x{{dim}}{{abrv}}
-    Matrix{{dim}}x{{dim}}{{abrv}}.rotation(ang, axis) * self
+    self * Matrix{{dim}}x{{dim}}{{abrv}}.rotation(ang, axis)
   end
 
   def rotate(ang : Number, axis0 : Number, axis1 : Number, axis2 : Number) : Matrix{{dim}}x{{dim}}{{abrv}}
@@ -258,6 +258,18 @@ macro define_perspective_class_method(abrv, dim)
   end
 end
 
+macro define_transpose_method(abrv, dim1, dim2)
+  def transpose : Matrix{{dim2}}x{{dim1}}{{abrv}}
+    Matrix{{dim2}}x{{dim1}}{{abrv}}.new(
+      {% for i in 0...dim1 %}
+        {% for j in 0...dim2 %}
+          @v{{j}}{{i}},
+        {% end %}
+      {% end %}
+    )
+  end
+end
+
 macro define_type_conversion_method(qabrv, dim1, dim2)
   def to_{{qabrv}} : Matrix{{dim1}}x{{dim2}}{{qabrv}}
     Matrix{{dim1}}x{{dim2}}{{qabrv}}.new(
@@ -315,6 +327,7 @@ macro define_matrix(klass, abrv, dim1, dim2)
     define_initializer({{abrv}}, {{dim1}}, {{dim2}})
     define_to_a_methods({{klass}}, {{dim1}}, {{dim2}})
     define_to_s_method({{dim1}}, {{dim2}})
+    define_transpose_method({{abrv}}, {{dim1}}, {{dim2}})
 
     {% for op in OPERATORS %}
       define_scalar_operation({{abrv}}, {{dim1}}, {{dim2}}, {{op}})

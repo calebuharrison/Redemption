@@ -154,6 +154,11 @@ macro define_vector(klass, abrv, dim)
     define_instance_variables({{klass}}, {{dim}})
     define_initializer({{abrv}}, {{dim}})
     define_to_a_method({{klass}}, {{dim}})
+    define_negate_method({{abrv}}, {{dim}})
+    define_magnitude_method({{klass}})
+    define_normalize_method({{abrv}}, {{dim}})
+    define_to_s_method({{dim}})
+    define_swizzle_operators({{klass}}, {{abrv}}, {{dim}})
     {% for op in OPERATORS %}
       define_scalar_operation({{op}}, {{abrv}}, {{dim}})
     {% end %}
@@ -167,11 +172,6 @@ macro define_vector(klass, abrv, dim)
         define_cross_product_method({{abrv}}, {{qabrv}}, {{dim}})
       {% end %}
     {% end %}
-    define_negate_method({{abrv}}, {{dim}})
-    define_magnitude_method({{klass}})
-    define_normalize_method({{abrv}}, {{dim}})
-    define_to_s_method({{dim}})
-    define_swizzle_operators({{klass}}, {{abrv}}, {{dim}})
   end
 end
 

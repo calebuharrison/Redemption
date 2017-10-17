@@ -15,5 +15,4 @@ module Redemption
   DIM_ARRAY = [2, 3, 4]
   SWIZZLE_ARRAY = [ [x, y, z, w], [r, g, b, a], [s, t, p, q] ]
   OPERATORS = [:+, :-, :*, :/]
-  ORTH_ARGS = [left, right, bottom, top, near, far]
 end
