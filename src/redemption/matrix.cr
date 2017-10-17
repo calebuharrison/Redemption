@@ -233,7 +233,7 @@ macro define_perspective_class_method(abrv, dim)
     near : Number,
     far : Number
   )
-    h = 1 / Math.tan(fov.to_{{abrv}} * (Math::PI / 360))
+    h = 1 / Math.tan(fov.to_{{abrv}} * 0.5 * (Math::PI / 180))
     n = near.to_{{abrv}}
     f = far.to_{{abrv}}
     Matrix{{dim}}x{{dim}}{{abrv}}.new(
@@ -247,11 +247,11 @@ macro define_perspective_class_method(abrv, dim)
       0,
       0,
       0,
-      (f + n) / (n - f),
+      -1 * (f + n) / (f - n),
+      -1 * ((2 * f * n) / (f - n)),
+      0,
+      0,
       -1,
-      0,
-      0,
-      2 * ((n * f) / (n - f)),
       0
     )
   end
