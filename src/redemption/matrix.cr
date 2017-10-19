@@ -258,6 +258,25 @@ macro define_perspective_class_method(abrv, dim)
   end
 end
 
+macro define_look_at_class_method(abrv, qabrv)
+  def self.look_at(
+    camera_position : Vector3{{qabrv}},
+    target_position : Vector3{{qabrv}},
+    up : Vector3{{qabrv}}) : Matrix4x4{{abrv}}
+    direction = (camera_position - target_position).normalize
+    r = up.cross(direction).to_a
+    u = up.to_a
+    d = direction.to_a
+
+    Matrix4x4{{abrv}}.new(
+      r[0], r[1], r[2], 0,
+      u[0], u[1], u[2], 0,
+      d[0], d[1], d[2], 0,
+      0,    0,    0,    1
+    ) * Matrix4x4{{abrv}}.translation(camera_position.negate)
+  end
+end
+
 macro define_transpose_method(abrv, dim1, dim2)
   def transpose : Matrix{{dim2}}x{{dim1}}{{abrv}}
     Matrix{{dim2}}x{{dim1}}{{abrv}}.new(
@@ -348,6 +367,7 @@ macro define_matrix(klass, abrv, dim1, dim2)
           define_rotate_methods({{abrv}}, {{qabrv}}, {{dim1}})
           define_orthographic_class_method({{abrv}}, {{dim1}})
           define_perspective_class_method({{abrv}}, {{dim1}})
+          define_look_at_class_method({{abrv}}, {{qabrv}})
         {% end %}
       {% end %}
     {% end %}
